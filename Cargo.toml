@@ -4,4 +4,5 @@ version = "0.1.0"
 authors = ["Danilo Bargen <mail@dbrgn.ch>"]
 
 [dependencies]
-gerber-types = "0.1.0"
+conv = "0.3"
+gerber-types = { git = "https://github.com/dbrgn/gerber-types-rs" }
