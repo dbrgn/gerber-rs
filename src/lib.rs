@@ -10,18 +10,23 @@ use types::GerberCode;
 
 #[derive(Debug)]
 pub struct Layer {
+    coordinate_format: types::CoordinateFormat,
+    unit: types::Unit,
+
     file_attributes: Vec<types::FileAttribute>,
     apertures: Vec<Rc<types::ApertureDefinition>>,
-    coordinate_format: types::CoordinateFormat,
     commands: Vec<types::Command>,
 }
 
 impl Layer {
-    pub fn new(coordinate_format: types::CoordinateFormat) -> Self {
+    pub fn new(coordinate_format: types::CoordinateFormat,
+               unit: types::Unit) -> Self {
         Layer {
+            coordinate_format: coordinate_format,
+            unit: unit,
+
             file_attributes: vec![],
             apertures: vec![],
-            coordinate_format: coordinate_format,
             commands: vec![],
         }
     }
@@ -72,6 +77,22 @@ impl Layer {
     /// (which is always a bug in that library).
     pub fn to_code(&self) -> String {
         let mut writer = BufWriter::new(vec![]);
+
+        // Write coordinate format
+        types::Command::ExtendedCode(
+            types::ExtendedCode::CoordinateFormat(
+                self.coordinate_format,
+            )
+        ).to_code(&mut writer).unwrap();
+        write!(writer, "\n").unwrap();
+
+        // Write unit
+        types::Command::ExtendedCode(
+            types::ExtendedCode::Unit(
+                self.unit
+            )
+        ).to_code(&mut writer).unwrap();
+        write!(writer, "\n").unwrap();
 
         // Write attributes
         // TODO: This is unelegant

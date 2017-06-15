@@ -2,11 +2,11 @@ extern crate gerber;
 
 use gerber::Layer;
 use gerber::types::{FileAttribute, Part, FileFunction, ExtendedPosition, CopperType};
-use gerber::types::{CoordinateFormat, Aperture, Circle, Rectangular};
+use gerber::types::{CoordinateFormat, Unit, Aperture, Circle, Rectangular};
 
 fn main() {
     let coordinate_format = CoordinateFormat::new(6, 6);
-    let mut layer = Layer::new(coordinate_format);
+    let mut layer = Layer::new(coordinate_format, Unit::Millimeters);
 
     // Set attributes
     layer.set_file_attribute(FileAttribute::Part(Part::Single));
